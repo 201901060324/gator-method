@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>港股互联网 · 结构复盘（数据窗口 2026-09-25）</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 32px 20px 64px;
+    font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", system-ui, sans-serif;
+    background: #f5f6f8; color: #1c1c1e; line-height: 1.65;
+  }
+  .wrap { max-width: 1120px; margin: 0 auto; }
+  h1 { font-size: 26px; font-weight: 600; margin: 0 0 6px; letter-spacing: -0.3px; }
+  .sub { font-size: 13px; color: #6b6b70; margin-bottom: 24px; }
+  .card {
+    background: #fff; border: 1px solid #e4e6ea; border-radius: 12px;
+    padding: 22px 24px; margin-bottom: 20px;
+  }
+  h2 { font-size: 17px; font-weight: 600; margin: 0 0 14px; padding-left: 10px; border-left: 3px solid #1c1c1e; }
+  h3 { font-size: 14px; font-weight: 600; margin: 20px 0 8px; color: #3a3a3e; }
+  p { margin: 0 0 10px; font-size: 14px; }
+  .tldr li { font-size: 14px; margin-bottom: 8px; }
+  .tldr { padding-left: 20px; margin: 0; }
+  .hl { background: #fff3cd; padding: 1px 4px; border-radius: 3px; font-weight: 600; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 6px 0 4px; }
+  th, td { padding: 7px 9px; text-align: right; border-bottom: 1px solid #eef0f3; white-space: nowrap; }
+  th { background: #f8f9fb; font-weight: 600; color: #3a3a3e; text-align: right; font-size: 12px; }
+  th:first-child, td:first-child { text-align: left; }
+  th.l, td.l { text-align: left; }
+  .up { color: #c62828; }
+  .down { color: #1a7f37; }
+  tbody tr:hover { background: #fafbfc; }
+  .src { font-size: 11.5px; color: #8a8a90; margin-top: 8px; line-height: 1.5; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 820px) { .grid2 { grid-template-columns: 1fr; } }
+  .metric { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  @media (max-width: 820px) { .metric { grid-template-columns: repeat(2, 1fr); } }
+  .m { background: #f8f9fb; border: 1px solid #eceef1; border-radius: 10px; padding: 12px 14px; }
+  .m .k { font-size: 11.5px; color: #6b6b70; margin-bottom: 4px; }
+  .m .v { font-size: 19px; font-weight: 600; letter-spacing: -0.3px; }
+  .m .n { font-size: 11.5px; color: #8a8a90; margin-top: 2px; }
+  .chart { width: 100%; height: 380px; }
+  .chart-sm { width: 100%; height: 320px; }
+  .tag { display: inline-block; font-size: 11.5px; padding: 2px 8px; border-radius: 20px; border: 1px solid; }
+  .tag-no { color: #1a7f37; border-color: #b7e0c2; background: #f0f9f3; }
+  .tag-half { color: #9a6700; border-color: #f0dca6; background: #fdf6e3; }
+  .tag-na { color: #6b6b70; border-color: #dcdee2; background: #f5f6f8; }
+  .note { background: #fdf6e3; border: 1px solid #f0dca6; border-radius: 8px; padding: 12px 14px; font-size: 13px; margin: 10px 0; }
+  .disc { font-size: 12px; color: #6b6b70; border-top: 1px dashed #dcdee2; padding-top: 14px; margin-top: 8px; line-height: 1.7; }
+  .foot { text-align: center; font-size: 12px; color: #8a8a90; margin-top: 26px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>港股互联网 · 结构复盘</h1>
+  <div class="sub">
+    数据窗口：港股 2026-09-25 收盘 ｜ A股 2026-09-24 收盘（9/25 中秋休市，两市<strong>不同日</strong>）<br>
+    数据来源：腾讯自选股数据接口（WeStock CLI），取数时间 2026-09-27 ｜ 分析框架：预案 - 信号 - 执行
+  </div>
+
+  <div class="card">
+    <h2>结论先行</h2>
+    <ul class="tldr">
+      <li><strong>止跌信号满足 0.5 / 5</strong>（港股口径下 2 条不适用、1 条缺数据）——按「≥3 才出手」的阈值，<span class="hl">当前不具备出手条件</span>。</li>
+      <li><strong>恒生科技 4311.78，距 52 周低点仅 +1.9%</strong>（低 4229.94 / 高 6715.46），年初至今 -21.83%，形态属「破区间下沿不回拉」。</li>
+      <li><strong>20 日窗口 13 只全部下跌</strong>（-1.45% ~ -17.54%）＝共识性下杀；<strong>60 日窗口 6 涨 7 跌</strong>＝前期强势股在补跌。前者是情绪，后者是结构。</li>
+      <li><strong>南向资金在做「结构减法」而非总量放水</strong>：季度加仓 网易 +121.0 亿、腾讯 +111.5 亿、百度 +81.4 亿、阿里 +47.9 亿、快手 +45.4 亿；同时砍 美团 -115.7 亿、小米 -46.5 亿、B站 -10.4 亿、金蝶 -3.1 亿。</li>
+      <li><strong>板块是拖累项，不是火车头</strong>：恒生科技 20 日 -6.37% vs 恒生指数 -4.20%，跑输 2.17pct；海外中概同理（KWEB 20 日 -2.15% vs FXI +6.22%）。</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>一、指数对照</h2>
+    <div class="metric">
+      <div class="m"><div class="k">恒生科技</div><div class="v">4311.78</div><div class="n down">-1.13% ｜ 距 52 周低 +1.9%</div></div>
+      <div class="m"><div class="k">恒生指数</div><div class="v">24510.09</div><div class="n down">-1.01% ｜ 距 52 周低 +8.8%</div></div>
+      <div class="m"><div class="k">恒生科技 年初至今</div><div class="v down">-21.83%</div><div class="n">恒生指数 -4.37%</div></div>
+      <div class="m"><div class="k">KWEB 年初至今</div><div class="v down">-27.81%</div><div class="n">FXI -10.64%</div></div>
+    </div>
+    <table>
+      <thead>
+        <tr><th class="l">标的</th><th>收盘</th><th>当日</th><th>近 5 日</th><th>近 20 日</th><th>近 60 日</th><th>年初至今</th><th>52 周低</th><th>52 周高</th><th>距 52 周低</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="l">恒生科技 (hkHSTECH)</td><td>4311.78</td><td class="down">-1.13%</td><td class="down">-2.13%</td><td class="down">-6.37%</td><td class="down">-4.16%</td><td class="down">-21.83%</td><td>4229.94</td><td>6715.46</td><td class="down">+1.9%</td></tr>
+        <tr><td class="l">恒生指数 (hkHSI)</td><td>24510.09</td><td class="down">-1.01%</td><td class="down">-0.97%</td><td class="down">-4.20%</td><td class="down">-1.19%</td><td class="down">-4.37%</td><td>22518.00</td><td>28056.10</td><td class="down">+8.8%</td></tr>
+        <tr><td class="l">KWEB 中概互联 ETF (usKWEB)</td><td>24.58 美元</td><td class="down">-0.45%</td><td class="down">-1.01%</td><td class="down">-2.15%</td><td class="down">-5.82%</td><td class="down">-27.81%</td><td>23.23</td><td>40.88</td><td class="down">+5.8%</td></tr>
+        <tr><td class="l">FXI 中国大盘 ETF (usFXI)</td><td>33.96 美元</td><td class="down">-0.82%</td><td class="down">-1.05%</td><td class="up">+6.22%</td><td class="down">-3.63%</td><td class="down">-10.64%</td><td>31.19</td><td>41.24</td><td class="down">+8.9%</td></tr>
+        <tr><td class="l">上证指数 (sh000001)</td><td>3888.37</td><td class="down">-1.22%</td><td class="up">+0.33%</td><td class="down">-1.72%</td><td class="down">-3.49%</td><td class="down">-2.03%</td><td>—</td><td>—</td><td>—</td></tr>
+        <tr><td class="l">沪深300 (sh000300)</td><td>4439.14</td><td class="down">-1.73%</td><td class="down">-0.47%</td><td class="down">-4.13%</td><td class="down">-7.75%</td><td class="down">-4.12%</td><td>—</td><td>—</td><td>—</td></tr>
+        <tr><td class="l">中证2000 (cs932000)</td><td>3209.63</td><td class="down">-1.54%</td><td class="up">+2.33%</td><td class="up">+1.81%</td><td class="down">-7.81%</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+      </tbody>
+    </table>
+    <div class="src">
+      来源：腾讯自选股数据接口（WeStock CLI）。港股为 2026-09-25 收盘，A 股为 2026-09-24 收盘（9/25 中秋休市），美股 ETF 为 2026-09-25 美股收盘。<br>
+      <strong>跨市场窗口不对齐提醒</strong>：A 股与港股最后一根 K 线相差一个交易日，勿直接比较「当日」涨跌幅。
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>二、剪刀差与共振</h2>
+    <table>
+      <thead><tr><th class="l">对比组</th><th class="l">含义</th><th>近 20 日差</th><th class="l">判定</th></tr></thead>
+      <tbody>
+        <tr><td class="l">沪深300 vs 中证2000</td><td class="l">机构 vs 游资（剪刀差）</td><td>-5.94 pct</td><td class="l">分歧严重（权重跌 -4.13%，小票涨 +1.81%）</td></tr>
+        <tr><td class="l">恒生科技 vs 恒生指数</td><td class="l">板块 vs 大盘（带动性）</td><td>-2.17 pct</td><td class="l">不及格 —— 互联网跑输大盘</td></tr>
+        <tr><td class="l">KWEB vs FXI</td><td class="l">中概成长 vs 中概权重</td><td>-8.37 pct</td><td class="l">不及格 —— 互联网显著弱于中概大盘</td></tr>
+        <tr><td class="l">上证 vs 恒生科技</td><td class="l">内资 vs 外资定价</td><td>—</td><td class="l">不可比 —— 两市不同日，窗口未对齐</td></tr>
+      </tbody>
+    </table>
+    <div class="note">
+      <strong>读法</strong>：A 股这边是「权重跌、小票涨」，港股那边是「大盘稳、互联网跌」。两边同时出现的，是<strong>成长/互联网资产被系统性减配</strong>，而不是全域风险偏好崩塌。这是结构问题，不是总量问题。
+    </div>
+    <div class="src">来源：腾讯自选股数据接口（WeStock CLI），近 20 日涨跌幅区间截至各市场最后一根日 K（港股 2026-09-25 / A 股 2026-09-24）。差值为两序列涨跌幅之差的绝对值。</div>
+  </div>
+
+  <div class="card">
+    <h2>三、个股全景（13 只，按年初至今排序）</h2>
+    <table>
+      <thead>
+        <tr><th class="l">代码</th><th class="l">名称</th><th>收盘(港元)</th><th>当日</th><th>近 5 日</th><th>近 20 日</th><th>近 60 日</th><th>年初至今</th><th>PE(TTM)</th><th>距 52 周低</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="l">hk01024</td><td class="l">快手-W</td><td>30.02</td><td class="down">-1.57%</td><td class="down">-2.34%</td><td class="down">-10.28%</td><td class="down">-29.53%</td><td class="down">-52.55%</td><td>7.12</td><td class="down">+3.0%</td></tr>
+        <tr><td class="l">hk01698</td><td class="l">腾讯音乐-SW</td><td>32.38</td><td class="up">+1.12%</td><td class="up">+4.12%</td><td class="down">-5.10%</td><td class="down">-6.79%</td><td class="down">-52.42%</td><td>10.41</td><td class="down">+6.1%</td></tr>
+        <tr><td class="l">hk00268</td><td class="l">金蝶国际</td><td>7.38</td><td class="up">+0.07%</td><td class="down">-2.32%</td><td class="down">-17.54%</td><td class="up">+16.22%</td><td class="down">-44.47%</td><td>91.89</td><td class="down">+31.1%</td></tr>
+        <tr><td class="l">hk09961</td><td class="l">携程集团-S</td><td>309.20</td><td class="down">-1.34%</td><td class="down">-3.19%</td><td class="down">-11.35%</td><td class="down">-4.63%</td><td class="down">-44.19%</td><td>6.98</td><td class="down">+3.3%</td></tr>
+        <tr><td class="l">hk09626</td><td class="l">哔哩哔哩-W</td><td>116.50</td><td class="up">+0.09%</td><td class="down">-0.26%</td><td class="down">-11.61%</td><td class="down">-15.40%</td><td class="down">-39.61%</td><td>27.56</td><td class="down">+3.2%</td></tr>
+        <tr><td class="l">hk09888</td><td class="l">百度集团-W</td><td>85.30</td><td class="down">-1.16%</td><td class="down">-2.18%</td><td class="down">-10.91%</td><td class="down">-23.08%</td><td class="down">-35.13%</td><td>亏损</td><td class="down">+1.2%</td></tr>
+        <tr><td class="l">hk01810</td><td class="l">小米集团-W</td><td>25.90</td><td class="down">-2.56%</td><td class="down">-1.89%</td><td class="down">-6.90%</td><td class="up">+12.80%</td><td class="down">-34.10%</td><td>17.56</td><td class="down">+21.6%</td></tr>
+        <tr><td class="l">hk03690</td><td class="l">美团-W</td><td>71.65</td><td class="down">-0.83%</td><td class="down">-2.12%</td><td class="down">-7.55%</td><td class="up">+0.07%</td><td class="down">-30.64%</td><td>亏损</td><td class="down">+12.6%</td></tr>
+        <tr><td class="l">hk00700</td><td class="l">腾讯控股</td><td>436.60</td><td class="down">-0.41%</td><td class="up">+4.20%</td><td class="down">-4.09%</td><td class="up">+1.25%</td><td class="down">-26.46%</td><td>14.64</td><td class="down">+6.2%</td></tr>
+        <tr><td class="l">hk09988</td><td class="l">阿里巴巴-W</td><td>108.40</td><td class="down">-1.45%</td><td class="down">-0.82%</td><td class="down">-4.83%</td><td class="up">+15.20%</td><td class="down">-23.54%</td><td>25.53</td><td class="down">+22.3%</td></tr>
+        <tr><td class="l">hk09999</td><td class="l">网易</td><td>180.90</td><td class="down">-3.05%</td><td class="down">-1.47%</td><td class="down">-5.51%</td><td class="down">-11.60%</td><td class="down">-14.23%</td><td>15.47</td><td class="down">+8.4%</td></tr>
+        <tr><td class="l">hk03888</td><td class="l">金山软件</td><td>24.52</td><td class="down">-0.97%</td><td class="down">-2.23%</td><td class="down">-1.45%</td><td class="up">+6.98%</td><td class="down">-13.39%</td><td>10.35</td><td class="down">+20.4%</td></tr>
+        <tr><td class="l">hk09618</td><td class="l">京东集团-SW</td><td>103.70</td><td class="down">-1.80%</td><td class="down">-1.24%</td><td class="down">-6.15%</td><td class="down">-0.48%</td><td class="down">-3.71%</td><td>16.37</td><td class="down">+12.7%</td></tr>
+      </tbody>
+    </table>
+    <div class="src">来源：腾讯自选股数据接口（WeStock CLI），行情截至 2026-09-25 收盘。PE 为 TTM 口径，来自同一接口；美团、百度接口返回负值，此处标注为「亏损」。距 52 周低 =（现价 ÷ 52 周最低价 − 1）。</div>
+  </div>
+
+  <div class="card">
+    <h2>四、四窗口涨跌幅对比</h2>
+    <div id="chart1" class="chart"></div>
+    <div class="src">来源：腾讯自选股数据接口（WeStock CLI），行情截至 2026-09-25 收盘。单位：%。</div>
+  </div>
+
+  <div class="card">
+    <h2>五、恒生科技指数 · 近 25 个交易日</h2>
+    <div id="chart4" class="chart"></div>
+    <div class="src">来源：腾讯自选股数据接口（WeStock CLI），日 K 截至 2026-09-25。上轴为指数点位（蜡烛：开/收/低/高），下轴为成交额（亿港元）。</div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h2>六、南向资金季度增减持</h2>
+      <div id="chart2" class="chart-sm"></div>
+      <div class="src">来源：腾讯自选股数据接口（WeStock CLI），南下持仓快照日 2026-09-27，变动口径为<strong>季度</strong>（capChgQuarterly，亿港元）。</div>
+    </div>
+    <div class="card">
+      <h2>七、卖空比例</h2>
+      <div id="chart3" class="chart-sm"></div>
+      <div class="src">来源：腾讯自选股数据接口（WeStock CLI），数据日期标注 2026-09-27。<strong>口径分歧提醒</strong>：财经媒体日报口径显示 9/25 美团卖空比例 24.05%、快手 24.65%，与本接口数值（45.8 / 46.95）差距较大，两者分子分母口径不同，本报告仅作「空头活跃度高」的定性参考。</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>八、止跌信号逐条核对（港股口径改编）</h2>
+    <table>
+      <thead><tr><th class="l">信号</th><th class="l">判定</th><th class="l">依据 / 说明</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="l">① 指数共振</td>
+          <td class="l"><span class="tag tag-no">不及格</span></td>
+          <td class="l">恒生科技 20 日 -6.37% vs 恒生指数 -4.20%，差 2.17pct，是<strong>背离</strong>不是收敛；A 股与港股不同日，跨市场共振无法判定</td>
+        </tr>
+        <tr>
+          <td class="l">② 火车头板块</td>
+          <td class="l"><span class="tag tag-no">不及格</span></td>
+          <td class="l">互联网是拖累项：跑输恒指 2.17pct、跑输 FXI 8.37pct。有涨停板吗？没有，没有就是不及格</td>
+        </tr>
+        <tr>
+          <td class="l">③ 气氛组证券</td>
+          <td class="l"><span class="tag tag-na">不适用</span></td>
+          <td class="l">港股无「券商气氛组」这一结构。可替代观察＝港交所 (00388) 与中资券商 H 股，本次<strong>未取数</strong></td>
+        </tr>
+        <tr>
+          <td class="l">④ 短线增量资金</td>
+          <td class="l"><span class="tag tag-half">半及格</span></td>
+          <td class="l">南向是<strong>结构性加仓</strong>而非总量放水：加 网易/腾讯/百度/阿里/快手，减 美团/小米/B站/金蝶。且缺日频净流入序列</td>
+        </tr>
+        <tr>
+          <td class="l">⑤ 股指基差</td>
+          <td class="l"><span class="tag tag-na">不适用</span></td>
+          <td class="l">港股无对应基差口径；A 股基差反映的是 A 股资金，不能外推到港股互联网</td>
+        </tr>
+        <tr style="background:#f8f9fb">
+          <td class="l"><strong>合计</strong></td>
+          <td class="l"><strong>0.5 / 5</strong></td>
+          <td class="l">按阈值 <strong>≥3 激进出手 / ≥4 保守出手</strong> → 当前<strong>不具备出手条件</strong></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>九、关键不确定项</h2>
+    <p>以下数据本次<strong>未取得或口径存疑</strong>，相关判断无法成立，不做事后补编：</p>
+    <ul class="tldr">
+      <li><strong>南向资金日频净流入序列</strong>——只有季度持仓变动与媒体口径的单日快照，无法判断短线资金节奏</li>
+      <li><strong>港交所 / 中资券商 H 股</strong>——作为「气氛组」替代指标的表现未取数</li>
+      <li><strong>核心标的财报数据</strong>（营收增速、毛利率、自由现金流）——互联网属轻资产，ROCE 分母小会虚高、不适用，应改看毛利率与现金流，但本次未取财报</li>
+      <li><strong>卖空数据的口径分歧未解决</strong>——本接口与媒体日报数值差距接近一倍，未找到统一口径</li>
+      <li><strong>跨市场窗口未对齐</strong>——A 股 9/25 中秋休市，恒生科技 vs 上证指数的共振关系本窗口不可判定</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>十、风险与反向情形</h2>
+    <h3>这套判断在什么情况下失效</h3>
+    <p><strong>1. 事件落地 + 资金集中回补。</strong>负面因素被提前定价后，事件正式落地时短线资金往往集中回补，可能出现「信号不满却已反弹」的局面。这种情形下严格等信号会踏空——但这是概率，不是规则错了。</p>
+    <p><strong>2. 叙事换帅。</strong>若互联网的定价逻辑从「电商/本地生活内卷」切换到「AI」，板块内部领涨结构会被重排。初期允许换帅，中后期不允许——当前若处于新叙事初期，换帅是被允许的，不能用旧领涨股的表现否定板块。</p>
+    <p><strong>3. 假见底的陷阱。</strong>以下三种「像见底但不是」的情形需警惕：地量不等于止跌（须先经历筹码充分交换）；光护盘不等于市场跟；卖空比例高不等于逼空将至（空头拥挤只是条件，不是触发）。</p>
+    <h3>当前最拥挤的交易</h3>
+    <p>市场普遍知道的信息是「跌得多了、估值便宜了」。尚未被充分定价的是：<strong>南向资金正在把互联网内部做减法</strong>——加的是现金流稳 + AI 叙事清楚的，减的是治理风险落地 + 竞争格局恶化的。换句话说，这一轮不是「互联网整体被抛弃」，而是<strong>互联网内部的重新分层</strong>。用「板块便宜」的单一理由去买整个板块，很可能是基于一个错误的归因。</p>
+  </div>
+
+  <div class="card">
+    <div class="disc">
+      <strong>免责声明</strong>：以上内容基于公开数据和量化分析，仅供参考，不构成投资建议。市场有风险，投资需谨慎。任何投资决策应结合个人风险承受能力、资金状况和投资目标独立判断，必要时咨询持牌专业机构。过往表现不预示未来收益。<br><br>
+      本报告中的个股表述均为市场结构与资金行为的框架推演，<strong>不构成任何买卖指令</strong>。所有历史数据仅用于解释分析方法，不代表当前观点。<br>
+      数据来源：腾讯自选股数据接口（WeStock CLI）；行情窗口 港股 2026-09-25 / A 股 2026-09-24；消息面来自财经媒体，<strong>非一手来源，需核实原文</strong>。
+    </div>
+  </div>
+
+  <div class="foot">交易路漫漫，诸君共勉励 ~</div>
+
+</div>
+
+<script>
+(function () {
+  var names = ['快手-W','腾讯音乐-SW','金蝶国际','携程集团-S','哔哩哔哩-W','百度集团-W','小米集团-W','美团-W','腾讯控股','阿里巴巴-W','网易','金山软件','京东集团-SW'];
+  var d5   = [-2.34, 4.12, -2.32, -3.19, -0.26, -2.18, -1.89, -2.12, 4.20, -0.82, -1.47, -2.23, -1.24];
+  var d20  = [-10.28, -5.10, -17.54, -11.35, -11.61, -10.91, -6.90, -7.55, -4.09, -4.83, -5.51, -1.45, -6.15];
+  var d60  = [-29.53, -6.79, 16.22, -4.63, -15.40, -23.08, 12.80, 0.07, 1.25, 15.20, -11.60, 6.98, -0.48];
+  var ytd  = [-52.55, -52.42, -44.47, -44.19, -39.61, -35.13, -34.10, -30.64, -26.46, -23.54, -14.23, -13.39, -3.71];
+
+  echarts.init(document.getElementById('chart1')).setOption({
+    tooltip: { trigger: 'axis', valueFormatter: function (v) { return v + '%'; } },
+    legend: { data: ['近5日', '近20日', '近60日', '年初至今'], top: 0 },
+    grid: { left: 60, right: 24, top: 48, bottom: 78 },
+    xAxis: { type: 'category', data: names, axisLabel: { interval: 0, rotate: 38, fontSize: 11 } },
+    yAxis: { type: 'value', name: '涨跌幅 (%)', splitLine: { lineStyle: { color: '#eef0f3' } } },
+    series: [
+      { name: '近5日', type: 'bar', data: d5, itemStyle: { color: '#7F77DD' } },
+      { name: '近20日', type: 'bar', data: d20, itemStyle: { color: '#378ADD' } },
+      { name: '近60日', type: 'bar', data: d60, itemStyle: { color: '#EF9F27' } },
+      { name: '年初至今', type: 'bar', data: ytd, itemStyle: { color: '#5F5E5A' } }
+    ]
+  });
+
+  var kdates = ['2026-08-24','2026-08-25','2026-08-26','2026-08-27','2026-08-28','2026-08-31','2026-09-01','2026-09-02','2026-09-03','2026-09-04','2026-09-07','2026-09-08','2026-09-09','2026-09-10','2026-09-11','2026-09-14','2026-09-15','2026-09-16','2026-09-17','2026-09-18','2026-09-21','2026-09-22','2026-09-23','2026-09-24','2026-09-25'];
+  var kohlc = [
+    [4713.16,4594.04,4575.35,4713.16],
+    [4602.30,4588.54,4545.44,4604.44],
+    [4622.98,4626.15,4619.03,4667.34],
+    [4665.28,4620.29,4612.25,4669.43],
+    [4580.98,4605.15,4580.98,4649.15],
+    [4585.61,4619.87,4531.22,4630.70],
+    [4591.12,4550.88,4550.88,4628.82],
+    [4532.22,4517.16,4460.13,4532.22],
+    [4549.36,4468.48,4451.56,4566.63],
+    [4533.82,4569.80,4533.82,4608.37],
+    [4558.07,4527.71,4509.38,4567.17],
+    [4502.53,4454.85,4447.43,4514.75],
+    [4459.27,4420.79,4398.28,4459.27],
+    [4359.41,4330.49,4311.94,4359.55],
+    [4271.73,4320.57,4250.84,4339.02],
+    [4290.58,4317.94,4290.58,4337.68],
+    [4338.45,4291.34,4290.26,4367.37],
+    [4311.70,4325.45,4259.27,4337.24],
+    [4281.03,4310.74,4254.46,4313.95],
+    [4328.41,4405.50,4328.41,4413.11],
+    [4401.82,4423.29,4376.40,4436.90],
+    [4467.90,4438.21,4422.69,4510.06],
+    [4438.86,4379.07,4366.37,4443.27],
+    [4344.85,4361.13,4330.02,4366.84],
+    [4318.17,4311.78,4246.12,4318.17]
+  ];
+  var kvol = [99.5,65.0,57.2,55.6,52.8,81.0,68.2,52.4,48.5,82.7,58.6,52.1,49.6,54.5,47.5,42.7,44.5,49.6,43.7,76.1,51.1,80.5,50.7,35.8,21.1];
+
+  echarts.init(document.getElementById('chart4')).setOption({
+    tooltip: { trigger: 'axis', axisPointer: { type: 'cross' } },
+    legend: { data: ['日K', '成交额'], top: 0 },
+    grid: { left: 66, right: 60, top: 48, bottom: 56 },
+    xAxis: { type: 'category', data: kdates, axisLabel: { fontSize: 10, rotate: 40 } },
+    yAxis: [
+      { type: 'value', scale: true, name: '点位', splitLine: { lineStyle: { color: '#eef0f3' } } },
+      { type: 'value', scale: true, name: '成交额(亿)' }
+    ],
+    series: [
+      { name: '日K', type: 'candlestick', data: kohlc, itemStyle: { color: '#c62828', color0: '#1a7f37', borderColor: '#c62828', borderColor0: '#1a7f37' } },
+      { name: '成交额', type: 'bar', yAxisIndex: 1, data: kvol, itemStyle: { color: '#c9cdd4' } }
+    ]
+  });
+
+  var sNames = ['网易','腾讯控股','百度集团-W','阿里巴巴-W','快手-W','金蝶国际','哔哩哔哩-W','小米集团-W','美团-W'];
+  var sVals  = [120.97, 111.50, 81.39, 47.91, 45.37, -3.08, -10.35, -46.49, -115.73];
+  var sData  = sVals.map(function (v) {
+    return { value: v, itemStyle: { color: v >= 0 ? '#c62828' : '#1a7f37' } };
+  });
+
+  echarts.init(document.getElementById('chart2')).setOption({
+    tooltip: { trigger: 'axis', valueFormatter: function (v) { return v + ' 亿港元'; } },
+    grid: { left: 88, right: 30, top: 16, bottom: 30 },
+    xAxis: { type: 'value', name: '亿港元', splitLine: { lineStyle: { color: '#eef0f3' } } },
+    yAxis: { type: 'category', data: sNames, inverse: true, axisLabel: { fontSize: 11 } },
+    series: [{ type: 'bar', data: sData, barWidth: '58%' }]
+  });
+
+  var shNames = ['小米集团-W','快手-W','美团-W','网易','百度集团-W','京东集团-SW','腾讯控股','哔哩哔哩-W','阿里巴巴-W'];
+  var shVals  = [53.09, 46.95, 45.80, 32.17, 29.16, 26.84, 26.59, 21.32, 21.02];
+
+  echarts.init(document.getElementById('chart3')).setOption({
+    tooltip: { trigger: 'axis', valueFormatter: function (v) { return v + '%'; } },
+    grid: { left: 88, right: 30, top: 16, bottom: 30 },
+    xAxis: { type: 'value', name: '%', splitLine: { lineStyle: { color: '#eef0f3' } } },
+    yAxis: { type: 'category', data: shNames, inverse: true, axisLabel: { fontSize: 11 } },
+    series: [{ type: 'bar', data: shVals, barWidth: '58%', itemStyle: { color: '#BA7517' } }]
+  });
+})();
+</script>
+</body>
+</html>
