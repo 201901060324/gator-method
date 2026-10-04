@@ -1,6 +1,13 @@
 - 开始
   - [项目说明](/README.md)
   - [使用条款与版权](/LICENSE.md)
+  - [参与贡献](/CONTRIBUTING.md)
+
+- 接入你的 AI
+  - [一键安装（30 秒）](/一键安装.md)
+  - [系统提示词（复制即用）](/SYSTEM-PROMPT.md)
+  - [WorkBuddy 技能文件](/SKILL.md)
+  - [集成指南](/集成指南.md)
 
 - 核心体系
   - [01 · 世界观](/01-世界观.md)
