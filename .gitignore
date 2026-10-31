@@ -1,1 +1,4 @@
 .DS_Store
+
+# 本地占位页：仅用于覆盖线上旧路径，不入库（见 sync_public.py 的 PUBLISH_VIDEO）
+06-视频提炼/
